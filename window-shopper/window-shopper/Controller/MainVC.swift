@@ -12,6 +12,9 @@ class MainVC: UIViewController {
     
     @IBOutlet weak var wageText: CurrencyTextField!
     @IBOutlet weak var priceText: CurrencyTextField!
+    @IBOutlet weak var resultLabel: UILabel!
+    @IBOutlet weak var hoursLabel: UILabel!
+    
     
     lazy var calculateButton: UIButton = {
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 60))
@@ -29,17 +32,34 @@ class MainVC: UIViewController {
         setupCalculateButton()
         wageText.inputAccessoryView = calculateButton
         priceText.inputAccessoryView = calculateButton
+        
+        resultLabel.isHidden = true
+        hoursLabel.isHidden = true
     }
     
     fileprivate func setupCalculateButton() {
-//        calculateButton.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: 60)
-//        view.addSubview(calculateButton)
-        
+        resultLabel.isHidden = false
+        hoursLabel.isHidden = false
     }
     
     @objc func calculate() {
-        print("123")
+        if let wageText = wageText.text, let priceText = priceText.text, let wage = Double(wageText), let price = Double(priceText) {
+            resultLabel.isHidden = false
+            hoursLabel.isHidden = false
+            resultLabel.text = String(Wage.getHours(forWage: wage, andPrice: price))
+            self.wageText.resignFirstResponder()
+            self.priceText.resignFirstResponder()
+        }
+
     }
+    
+    @IBAction func clearCalculatorPressed(_ sender: UIButton) {
+        wageText.text = nil
+        priceText.text = nil
+        resultLabel.isHidden = true
+        hoursLabel.isHidden = true
+    }
+    
 
 
 }
